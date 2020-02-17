@@ -2,17 +2,86 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewSwipe : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    Rigidbody rb;
+    bool isMobilePlatform;
+
+    private void Awake()
+    {
+#if UNITY_EDITOR || UNITY_STANDALONE
+        isMobilePlatform = false;
+#else
+        isMobilePlatform = true;
+#endif
+    }
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        //ForwardMove//
+        StartCoroutine(accelerate());
+        //
+
+        //Left-RightMove//
+        if (!isMobilePlatform)
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                rb.AddForce(-110, 0, 0);
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                rb.AddForce(110, 0, 0);
+            }
+        }
+        //
+
+        if (isMobilePlatform)
+        {
+            if (Input.touchCount > 0)
+                swipe();
+
+
+            void swipe()
+            {
+                Vector3 delta = Input.GetTouch(0).deltaPosition;
+                if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
+                {
+                    if (delta.x > 0)
+                        rb.AddForce(400, 0, 0);
+                    if (delta.y < 0)
+                        rb.AddForce(-400, 0, 0);
+                }
+            }
+        }
+        //
     }
+
+    IEnumerator accelerate()
+    {
+        while (true)
+        {
+            int i = 40;
+            rb.AddForce(0, 0, i);
+            i = +1;
+            yield return new WaitForSeconds(5);
+        
+        void OnCollisionEnter(UnityEngine.Collision collision)
+            {
+                if (collision.other.tag == "obstacle")
+                {
+                    i = 5;
+                }
+            }
+        }
+    }
+
+
 }
