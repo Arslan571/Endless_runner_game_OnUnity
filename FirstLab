@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace FirstLab_TimkanovArslan_191_311
+{
+    
+    public partial class Form1 : Form
+    {
+        double x;
+        double y;
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+            if ((e.KeyChar == '0') && (e.KeyChar == '9'))
+            {
+                return;
+            }
+            if (e.KeyChar == '.')
+            {
+                e.KeyChar = ',';
+            }
+            if (e.KeyChar == ',')
+            {
+                if (textBox1.Text.IndexOf(',') != -1)
+                {
+                    e.Handled = true;
+                }
+                return;
+                if(e.KeyChar == '-')
+                {
+                    x += (char)x;
+                }
+            }
+            if (Char.IsControl(e.KeyChar))
+
+            {
+                if (e.KeyChar == (char)Keys.Enter)
+                {
+                    button1.Focus();
+                    return;
+                }
+                e.Handled = true;
+            }
+        }
+    
+    
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //double x;
+            //double y;
+            
+            try
+            {
+               x = Convert.ToDouble(textBox1.Text);
+                
+                if(Math.Abs(x) > 4)
+                {
+                    y = Math.Pow(x, 2) + 5 * x;
+                    label2.Text = "При Х = " + x.ToString("n") + " функция вычисляется по формуле Y = X^2 + 5 * X\nРезультат: " + y;
+                    textBox1.Clear();
+                }else if(Math.Abs(x)<= 1)
+                {
+                    y = (3 * x + 1) * (5.1 * x - 3);
+                    label2.Text = "При Х = " + x.ToString("n") + " функция вычисляется по формуле Y = (3 * X + 1) * (5.1 * X - 3)";
+                    textBox1.Clear();
+                }
+                else
+                {
+                    label2.Text = "При Х = " + x.ToString("n") + " функция не определена";
+                    textBox1.Clear();
+                }
+
+            }
+            catch
+            {
+                textBox1.Focus();
+                label2.Text = "Вы ввели некорректное значение";
+                textBox1.Clear();
+            }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
